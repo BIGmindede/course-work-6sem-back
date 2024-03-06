@@ -38,6 +38,7 @@ class UserService {
         }
 
         if (!user.isActivated) {
+            await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate_account/${user.activationLink}`)
             throw ApiError.inactiveAccountError()
         }
 
@@ -79,11 +80,11 @@ class UserService {
             throw ApiError.unauthorizedError()
         }
 
-        const user = UserModel.findById(userData.id)
+        const user = await UserModel.findById(userData.id)
         const userDTO = new UserDTO(user);
         const tokens = jwtService.generateTokens({ ...userDTO })
 
-        await jwtService.saveToken(tokens.refreshToken)
+        await jwtService.saveToken(userData.id, tokens.refreshToken, tokenFound.authenticationLink)
         return { ...tokens, user: userDTO }
     }
 

@@ -24,7 +24,7 @@ class JWTService {
         }
     }
 
-    validateRefreshToken() {
+    validateRefreshToken(token) {
         try {
             const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET)
             return userData
@@ -62,7 +62,7 @@ class JWTService {
     }
 
     async findToken(refreshToken) {
-        const tokenData = await TokenModel.findOne(refreshToken)
+        const tokenData = await TokenModel.findOne({ refreshToken })
         return tokenData
     }
 
