@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken")
 const uuid = require("uuid")
 const TokenModel = require('../models/tokenModel')
 const ApiError = require("../exceptions/apiError")
-const userService = require("./userService")
+const userService = require("./authService")
 const UserModel = require("../models/userModel")
 
 class JWTService {

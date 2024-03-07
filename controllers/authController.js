@@ -1,9 +1,9 @@
 const { validationResult } = require("express-validator")
 const ApiError = require('../exceptions/apiError')
-const userService = require('../services/userService')
+const authService = require('../services/authService')
 const jwtService = require("../services/jwtService")
 
-class UserController {
+class AuthController {
     async registration(req, res, next) {
         try {
             const errors = validationResult(req)
@@ -11,7 +11,7 @@ class UserController {
                 return next(ApiError.badRequestError("Ошибка валидации", errors.array()))
             }
             const { email, password } = req.body
-            const userData = await userService.register(email, password)
+            const userData = await authService.register(email, password)
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 3600 * 1000, httpOnly: true })
             return res.json({ ...userData.user, accessToken: userData.accessToken })
         } catch(e) {
@@ -22,8 +22,7 @@ class UserController {
     async login(req, res, next) {
         try {
             const { email, password } = req.body
-            console.log(email, password)
-            const userData = await userService.login(email, password)
+            const userData = await authService.login(email, password)
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 3600 * 1000, httpOnly: true })
             return res.json({ ...userData.user, accessToken: userData.accessToken })
         } catch(e) {
@@ -34,8 +33,7 @@ class UserController {
     async activate(req, res, next) {
         try {
             const activationLink = req.params.link
-            console.log(activationLink)
-            await userService.activate(activationLink)
+            await authService.activate(activationLink)
             await jwtService.authenticateSession(activationLink)
             return res.redirect(process.env.CLIENT_URL)
         } catch(e) {
@@ -46,7 +44,6 @@ class UserController {
     async authenticateSession(req, res, next) {
         try {
             const authenticationLink = req.params.link
-            console.log(authenticationLink)
             await jwtService.authenticateSession(authenticationLink)
             return res.redirect(process.env.CLIENT_URL)
         } catch(e) {
@@ -57,7 +54,7 @@ class UserController {
     async refresh(req, res, next) {
         try {
             const { refreshToken } = req.cookies
-            const userData = await userService.refresh(refreshToken)
+            const userData = await authService.refresh(refreshToken)
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 3600 * 1000, httpOnly: true })
             return res.json({ ...userData.user, accessToken: userData.accessToken })
         } catch(e) {
@@ -68,22 +65,13 @@ class UserController {
     async logout(req, res, next) {
         try {
             const { refreshToken } = req.cookies
-            const token = await userService.logout(refreshToken)
+            const token = await authService.logout(refreshToken)
             res.clearCookie('refreshToken')
             return res.json(token)
         } catch(e) {
             next(e)            
         }
     }
-
-    async getUsers(req, res, next) {
-        try {
-            const users = userService.getAllUsers()
-            return res.json(users)
-        } catch(e) {
-            next(e)            
-        }
-    }
 }
 
-module.exports = new UserController()
+module.exports = new AuthController()

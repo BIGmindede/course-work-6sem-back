@@ -24,6 +24,10 @@ module.exports = class ApiError extends Error {
         return new ApiError(403, "Сессия устарела")
     }
 
+    static lowAuthorityError() {
+        return new ApiError(405, "Нет прав доступа к этой странице")
+    }
+
     static badRequestError(message, errors = []) {
         return new ApiError(400, message, errors)
     }

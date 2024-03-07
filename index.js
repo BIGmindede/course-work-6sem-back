@@ -3,8 +3,9 @@ const express = require("express")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const mongoose = require("mongoose")
-const router = require('./routes/index')
 const errorMiddleware = require('./middleware/errorMiddleware')
+const authorizationRouter = require('./routes/authRouter')
+const categoryRouter = require('./routes/categoryRouter')
 
 const app = express()
 
@@ -14,7 +15,8 @@ app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL
 }))
-app.use('/api', router)
+app.use('/api/auth', authorizationRouter)
+app.use('/api/category', categoryRouter)
 app.use(errorMiddleware)
 
 const start = async () => {
