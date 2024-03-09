@@ -13,11 +13,11 @@ module.exports = class ApiError extends Error {
     }
 
     static inactiveAccountError() {
-        return new ApiError(401, "Пользователь не активировал учетную запись")
+        return new ApiError(402, "Пользователь не активировал учетную запись")
     }
 
     static inactiveSessionError() {
-        return new ApiError(401, "Пользователь не аутентифицирован")
+        return new ApiError(402, "Пользователь не аутентифицирован")
     }
 
     static expiredSessionError() {

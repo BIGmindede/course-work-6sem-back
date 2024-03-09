@@ -7,7 +7,7 @@ class CategoryController {
             const { title, request, author } = req.body
             const categoryData = await categoryService.create(title, request, author)
             return res.json(categoryData)
-        } catch (error) {
+        } catch (e) {
             next(e)            
         }
     }
@@ -15,7 +15,7 @@ class CategoryController {
         try {
             const categories = await categoryService.getAll()
             return res.json(categories)
-        } catch (error) {
+        } catch (e) {
             next(e)
         }
     }
@@ -24,7 +24,7 @@ class CategoryController {
             const id = req.params.id
             const category = await categoryService.getOne(id)
             return res.json(category)
-        } catch (error) {
+        } catch (e) {
             next(e)            
         }
     }
@@ -33,7 +33,7 @@ class CategoryController {
             const id = req.params.id
             const category = await categoryService.remove(id)
             return res.json(category)
-        } catch (error) {
+        } catch (e) {
             next(e)            
         }
     }

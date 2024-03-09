@@ -4,12 +4,12 @@ const categoryModel = require("../models/categoryModel");
 
 class CategoryService {
     async create(title, request, author) {
-        const category = await categoryModel.findOne({ title })
-        if (category) {
+        const checkIfExists = await categoryModel.findOne({ title })
+        if (checkIfExists) {
             throw ApiError.badRequestError(`Категория: ${title} уже существует!`)
         }
 
-        category = await categoryModel.create({ title, request, author })
+        const category = await categoryModel.create({ title, request, author })
         
         const categoryData = new CategoryDTO(category)
         return categoryData
