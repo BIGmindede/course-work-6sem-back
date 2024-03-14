@@ -3,6 +3,8 @@ const express = require("express")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const mongoose = require("mongoose")
+const fileUpload = require('express-fileupload')
+
 const errorMiddleware = require('./middleware/errorMiddleware')
 const authorizationRouter = require('./routes/authRouter')
 const categoryRouter = require('./routes/categoryRouter')
@@ -10,6 +12,8 @@ const categoryRouter = require('./routes/categoryRouter')
 const app = express()
 
 app.use(express.json())
+app.use(express.static('static'))
+app.use(fileUpload({}))
 app.use(cookieParser())
 app.use(cors({
     credentials: true,

@@ -4,8 +4,9 @@ const categoryService = require("../services/categoryService")
 class CategoryController {
     async create(req, res, next) {
         try {
-            const { title, request, author } = req.body
-            const categoryData = await categoryService.create(title, request, author)
+            let { title, request, author } = req.body
+            if (request === 'null') request = null
+            const categoryData = await categoryService.create(title, req.files.picture, request, author)
             return res.json(categoryData)
         } catch (e) {
             next(e)            
@@ -23,6 +24,16 @@ class CategoryController {
         try {
             const id = req.params.id
             const category = await categoryService.getOne(id)
+            return res.json(category)
+        } catch (e) {
+            next(e)            
+        }
+    }
+    async update(req, res, next) {
+        try {
+            let { id, title } = req.body
+            if (title === 'undefined') title = null
+            const category = await categoryService.update(id, title, req.files.picture)
             return res.json(category)
         } catch (e) {
             next(e)            

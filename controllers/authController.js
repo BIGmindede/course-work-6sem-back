@@ -69,7 +69,7 @@ class AuthController {
             res.clearCookie('refreshToken')
             return res.json(token)
         } catch(e) {
-            next(e)            
+            next(e)
         }
     }
 }
