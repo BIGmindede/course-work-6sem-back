@@ -21,7 +21,7 @@ class FileService {
             const filePath = path.resolve('static', fileName)
             fs.unlink(filePath, (err) => {
                 if (err) {
-                    throw ApiError.fileRemoveError() 
+                    throw ApiError.fileRemoveError()
                 }
                 console.log("Файл успешно удален")
             })

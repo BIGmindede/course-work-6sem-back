@@ -9,11 +9,8 @@ class CategoryService {
         if (checkIfExists) {
             throw ApiError.badRequestError(`Категория: ${title} уже существует!`)
         }
-
-        const pictureName = await fileService.saveFile(picture)
-
+        const pictureName = fileService.saveFile(picture)
         const category = await categoryModel.create({ title, pictureName, request, author })
-        
         const categoryData = new CategoryDTO(category)
         return categoryData
     }
@@ -44,9 +41,11 @@ class CategoryService {
     }
 
     async remove(id) {
-        const category = await categoryModel.deleteOne({ id })
-        const categoryData = new CategoryDTO(category)
-        return categoryData
+        const deletedCategory = await categoryModel.findOne({ _id: id })
+        await categoryModel.deleteOne({ _id: id })
+        const deletedCategoryData = new CategoryDTO(deletedCategory)
+        fileService.removeFile(deletedCategoryData.pictureName)
+        return deletedCategoryData
     }
 }
 

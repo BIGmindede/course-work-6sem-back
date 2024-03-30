@@ -8,6 +8,7 @@ const fileUpload = require('express-fileupload')
 const errorMiddleware = require('./middleware/errorMiddleware')
 const authorizationRouter = require('./routes/authRouter')
 const categoryRouter = require('./routes/categoryRouter')
+const reviewRouter = require('./routes/reviewRouter')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(cors({
 }))
 app.use('/api/auth', authorizationRouter)
 app.use('/api/category', categoryRouter)
+app.use('/api/review', reviewRouter)
 app.use(errorMiddleware)
 
 const start = async () => {

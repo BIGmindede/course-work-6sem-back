@@ -6,7 +6,8 @@ const ReviewSchema = new Schema({
     title: { type: String, required: true },
     content: { type: String, required: true },
     reliability: { type: Number, float: true, default: 0 },
-    loadingDate: { type: Schema.Types.Date, required: true }
+    date: { type: Schema.Types.Date, required: true },
+    pictureName: { type: String, required: true }
 })
 
 module.exports = model("Review", ReviewSchema)

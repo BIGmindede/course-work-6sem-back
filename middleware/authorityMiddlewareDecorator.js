@@ -7,7 +7,7 @@ module.exports = (requiredRole) => async function(req, res, next) {
         const { refreshToken } = req.cookies
         const { user } = await jwtService.findToken(refreshToken)
         const { role } = await userService.getOne(user)
-        if (role !== requiredRole) {
+        if (!requiredRole.includes(role)) {
             next(ApiError.lowAuthorityError())
         }
         next()

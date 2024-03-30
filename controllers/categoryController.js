@@ -32,8 +32,9 @@ class CategoryController {
     async update(req, res, next) {
         try {
             let { id, title } = req.body
-            if (title === 'undefined') title = null
-            const category = await categoryService.update(id, title, req.files.picture)
+            if (title === '') title = null
+            const picture = req.files ? req.files.picture : null
+            const category = await categoryService.update(id, title, picture)
             return res.json(category)
         } catch (e) {
             next(e)            
