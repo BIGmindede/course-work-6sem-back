@@ -5,7 +5,7 @@ const authorityMiddlewareDecorator = require("../middleware/authorityMiddlewareD
 const Router = require("express").Router
 const router = new Router()
 
-router.post('/', authMiddleware, authorityMiddlewareDecorator(['user', 'admin']), requestController.create)
+router.post('/', authMiddleware, authorityMiddlewareDecorator(['user']), requestController.create)
 
 router.get('/', authMiddleware, requestController.getAll)
 

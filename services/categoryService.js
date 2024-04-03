@@ -53,7 +53,7 @@ class CategoryService {
     async remove(id) {
         const deletedCategory = await categoryModel.findOne({ _id: id })
         await categoryModel.deleteOne({ _id: id })
-        const author = await userModel.findOne(category.author)
+        const author = await userModel.findOne(deletedCategory.author)
         const deletedCategoryData = new CategoryDTO(deletedCategory, new UserDTO(author))
         fileService.removeFile(deletedCategoryData.pictureName)
         return deletedCategoryData
