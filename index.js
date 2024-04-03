@@ -9,6 +9,8 @@ const errorMiddleware = require('./middleware/errorMiddleware')
 const authorizationRouter = require('./routes/authRouter')
 const categoryRouter = require('./routes/categoryRouter')
 const reviewRouter = require('./routes/reviewRouter')
+const userRouter = require('./routes/userRouter')
+const requestRouter = require('./routes/requestRouter')
 
 const app = express()
 
@@ -23,6 +25,8 @@ app.use(cors({
 app.use('/api/auth', authorizationRouter)
 app.use('/api/category', categoryRouter)
 app.use('/api/review', reviewRouter)
+app.use('/api/user', userRouter)
+app.use('/api/request', requestRouter)
 app.use(errorMiddleware)
 
 const start = async () => {

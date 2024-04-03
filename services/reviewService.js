@@ -1,10 +1,10 @@
-const CategoryDTO = require("../dtos/categoryDTO")
 const ReviewDTO = require("../dtos/reviewDTO")
+const UserDTO = require("../dtos/userDTO")
 const categoryModel = require("../models/categoryModel")
 const reviewCommentModel = require("../models/reviewCommentModel")
 const reviewModel = require("../models/reviewModel")
 const reviewRateModel = require("../models/reviewRateModel")
-const categoryService = require("./categoryService")
+const userModel = require("../models/userModel")
 const fileService = require("./fileService")
 
 class ReviewService {
@@ -15,18 +15,24 @@ class ReviewService {
         const category = categoryData.id
         const review = await reviewModel
             .create({ title, content, author, category, pictureName, date })
-        const reviewData = new ReviewDTO(review)
+        const relatedAuthor = await userModel.findOne(review.author)
+        const reviewData = new ReviewDTO(review, new UserDTO(relatedAuthor))
         return reviewData
     }
 
     async getAll() {
-        const reviews = (await reviewModel.find()).map(model => new ReviewDTO(model))
+        
+        const reviews = Promise.all((await reviewModel.find()).map(async (model) => {
+            const author = await userModel.findOne(model.author)
+            return new ReviewDTO(model, new UserDTO(author))
+        }))
         return reviews
     }
 
     async getOne(id) {
         const review = await reviewModel.findOne({ id })
-        const reviewData = new ReviewDTO(review)
+        const author = await userModel.findOne(review.author)
+        const reviewData = new ReviewDTO(review, new UserDTO(author))
         return reviewData
     }
 
@@ -39,7 +45,7 @@ class ReviewService {
         await reviewModel.deleteOne({ _id: id })
         await reviewRateModel.deleteMany({ review: id })
         await reviewCommentModel.deleteMany({ review: id })
-        const deletedReviewData = new ReviewDTO(deletedReview)
+        const deletedReviewData = new ReviewDTO(deletedReview, null)
         fileService.removeFile(deletedReviewData.pictureName)
         return deletedReviewData
     }

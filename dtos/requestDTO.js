@@ -1,21 +1,17 @@
-module.exports = class ReviewDTO {
+module.exports = class RequestDTO {
     id
-    category
     author
     title
     content
-    reliability
     date
-    pictureName
+    status
 
     constructor(model, author) {
         this.id = model._id
-        this.category = model.category
         this.title = model.title
         this.content = model.content
-        this.reliability = model.reliability
         this.date = model.date
-        this.pictureName = model.pictureName
+        this.status = model.status
         this.author = author
     }
 }

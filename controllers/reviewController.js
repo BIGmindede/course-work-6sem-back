@@ -36,7 +36,7 @@ class ReviewController {
     }
     async remove(req, res, next) {
         try {
-            const id = req.params.id
+            const { id } = req.params
             const review = await reviewService.remove(id)
             return res.json(review)
         } catch (e) {

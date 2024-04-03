@@ -4,6 +4,7 @@ const UserRequestSchema = new Schema({
     author: { type: Schema.Types.ObjectId, ref: "User" },
     title: { type: String, required: true },
     content: { type: String },
+    status: { type: String, default: 'В обработке' },
     date: { type: Schema.Types.Date, required: true }
 })
 

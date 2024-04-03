@@ -42,7 +42,7 @@ class CategoryController {
     }
     async remove(req, res, next) {
         try {
-            const id = req.params.id
+            const { id } = req.params
             const category = await categoryService.remove(id)
             return res.json(category)
         } catch (e) {

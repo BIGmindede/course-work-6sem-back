@@ -1,5 +1,6 @@
 module.exports = class UserDTO {
     email
+    nickname
     id
     isActivated
     role
@@ -9,5 +10,6 @@ module.exports = class UserDTO {
         this.id = model._id
         this.isActivated = model.isActivated
         this.role = model.role
+        this.nickname = model.nickname
     }
 }
