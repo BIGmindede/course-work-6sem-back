@@ -1,15 +1,17 @@
-const reviewController = require("../controllers/reviewController")
-const authMiddleware = require("../middleware/authMiddleware")
-const authorityMiddlewareDecorator = require("../middleware/authorityMiddlewareDecorator")
+import { reviewController } from "../controllers/reviewController.js"
+import { authMiddleware } from "../middleware/authMiddleware.js"
+import { authorityMiddlewareDecorator } from "../middleware/authorityMiddlewareDecorator.js"
+import { Router } from "express"
 
-const Router = require("express").Router
 const router = new Router()
 
-router.post('/', authMiddleware, reviewController.create)
+router.post('/', authMiddleware, authorityMiddlewareDecorator(['user', 'admin']), reviewController.create)
 
 router.get('/', reviewController.getAll)
 
 router.get('/:id', reviewController.getOne)
+
+router.get('/by_user/:userId', reviewController.getUserReviews)
 
 // Только для пересчета оценок
 router.put('/', authMiddleware,
@@ -17,4 +19,4 @@ router.put('/', authMiddleware,
 
 router.delete('/:id', authMiddleware, reviewController.remove)
 
-module.exports = router
+export const reviewRouter = router

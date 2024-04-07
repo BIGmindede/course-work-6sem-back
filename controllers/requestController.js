@@ -1,4 +1,4 @@
-const requestService = require("../services/requestService")
+import { requestService } from "../services/requestService.js"
 
 class RequestController {
     async create(req, res, next) {
@@ -18,6 +18,15 @@ class RequestController {
             next(e)
         }
     }
+    async getUserRequests(req, res, next) {
+        try {
+            const { userId } = req.params
+            const requests = await requestService.getUserRequests(userId)
+            return res.json(requests)
+        } catch (e) {
+            next(e)
+        }
+    }
     // async getOne(req, res, next) {
     //     try {
             
@@ -27,7 +36,8 @@ class RequestController {
     // }
     async update(req, res, next) {
         try {
-            const { id, status } = req.body
+            const { id } = req.params
+            const { status } = req.body
             const updatedRequest = await requestService.update(id, status)
             return res.json(updatedRequest)
         } catch (e) {
@@ -36,11 +46,13 @@ class RequestController {
     }
     async remove(req, res, next) {
         try {
-            
+            const { id } = req.params
+            const deletedRequest = await requestService.remove(id)
+            return res.json(deletedRequest)
         } catch (e) {
             next(e)            
         }
     }
 }
 
-module.exports = new RequestController()
+export const requestController = new RequestController()

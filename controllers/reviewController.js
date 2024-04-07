@@ -1,4 +1,4 @@
-const reviewService = require("../services/reviewService")
+import { reviewService } from "../services/reviewService.js"
 
 class ReviewController {
     async create(req, res, next) {
@@ -15,6 +15,15 @@ class ReviewController {
     async getAll(req, res, next) {
         try {
             const reviews = await reviewService.getAll()
+            return res.json(reviews)
+        } catch (e) {
+            next(e)
+        }
+    }
+    async getUserReviews(req, res, next) {
+        try {
+            const { userId } = req.params
+            const reviews = await reviewService.getUserReviews(userId)
             return res.json(reviews)
         } catch (e) {
             next(e)
@@ -37,12 +46,12 @@ class ReviewController {
     async remove(req, res, next) {
         try {
             const { id } = req.params
-            const review = await reviewService.remove(id)
-            return res.json(review)
+            const deletedReview = await reviewService.remove(id)
+            return res.json(deletedReview)
         } catch (e) {
             next(e)            
         }
     }
 }
 
-module.exports = new ReviewController()
+export const reviewController = new ReviewController()

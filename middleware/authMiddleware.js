@@ -1,8 +1,8 @@
-const ApiError = require("../exceptions/apiError")
-const jwtService = require("../services/jwtService")
+import { ApiError } from "../exceptions/apiError.js"
+import { jwtService } from "../services/jwtService.js"
 
 
-module.exports = async function(req, res, next) {
+export async function authMiddleware(req, res, next) {
     try {
         const authorizationHeader = req.headers.authorization
         if (!authorizationHeader) {

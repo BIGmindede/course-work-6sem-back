@@ -1,5 +1,5 @@
-const UserDTO = require("../dtos/userDTO")
-const userModel = require("../models/userModel")
+import { UserDTO } from "../dtos/userDTO.js"
+import { userModel } from "../models/userModel.js"
 
 
 class UserService {
@@ -22,4 +22,4 @@ class UserService {
     }
 }
 
-module.exports = new UserService()
+export const userService = new UserService()

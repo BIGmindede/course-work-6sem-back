@@ -1,14 +1,13 @@
-const uuid = require("uuid")
-const path = require('path')
-const fs = require("fs")
-const { error } = require("console")
-const ApiError = require("../exceptions/apiError")
+import { v4 } from "uuid"
+import { resolve } from 'path'
+import { unlink } from "fs"
+import { ApiError } from "../exceptions/apiError.js"
 
 class FileService {
     saveFile(file) {
         try {
-            const fileName = uuid.v4() + '.' + file.mimetype.split('/')[1]
-            const filePath = path.resolve('static', fileName)
+            const fileName = v4() + '.' + file.mimetype.split('/')[1]
+            const filePath = resolve('static', fileName)
             file.mv(filePath)
             return fileName
         } catch(e) {
@@ -18,8 +17,8 @@ class FileService {
 
     removeFile(fileName) {
         try {
-            const filePath = path.resolve('static', fileName)
-            fs.unlink(filePath, (err) => {
+            const filePath = resolve('static', fileName)
+            unlink(filePath, (err) => {
                 if (err) {
                     throw ApiError.fileRemoveError()
                 }
@@ -31,4 +30,4 @@ class FileService {
     }
 }
 
-module.exports = new FileService()
+export const fileService = new FileService()

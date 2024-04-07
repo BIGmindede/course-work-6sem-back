@@ -1,4 +1,4 @@
-module.exports = class ApiError extends Error {
+export class ApiError extends Error {
     status
     errors
 
@@ -25,7 +25,7 @@ module.exports = class ApiError extends Error {
     }
 
     static lowAuthorityError() {
-        return new ApiError(405, "Нет прав доступа к этой странице")
+        return new ApiError(405, "Нет прав доступа")
     }
 
     static badRequestError(message, errors = []) {

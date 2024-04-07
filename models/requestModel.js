@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose')
+import { Schema, model } from 'mongoose'
 
-const UserRequestSchema = new Schema({
+const RequestSchema = new Schema({
     author: { type: Schema.Types.ObjectId, ref: "User" },
     title: { type: String, required: true },
     content: { type: String },
@@ -8,4 +8,4 @@ const UserRequestSchema = new Schema({
     date: { type: Schema.Types.Date, required: true }
 })
 
-module.exports = model("UserRequest", UserRequestSchema)
+export const requestModel = model("UserRequest", RequestSchema)

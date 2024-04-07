@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose")
+import { Schema, model } from 'mongoose'
 
 const ReviewRateSchema = new Schema({
     review: { type: Schema.Types.ObjectId, ref: "Review" },
@@ -6,4 +6,4 @@ const ReviewRateSchema = new Schema({
     author: { type: Schema.Types.ObjectId, ref: "User" }
 })
 
-module.exports = model("ReviewRate", ReviewRateSchema)
+export const reviewRateModel = model("ReviewRate", ReviewRateSchema)

@@ -1,8 +1,8 @@
-const categoryController = require("../controllers/categoryController")
-const authMiddleware = require("../middleware/authMiddleware")
-const authorityMiddlewareDecorator = require("../middleware/authorityMiddlewareDecorator")
+import { categoryController } from "../controllers/categoryController.js"
+import { authMiddleware } from "../middleware/authMiddleware.js"
+import { authorityMiddlewareDecorator } from "../middleware/authorityMiddlewareDecorator.js"
+import { Router } from "express"
 
-const Router = require("express").Router
 const router = new Router()
 
 router.post('/', authMiddleware,
@@ -19,4 +19,4 @@ router.put('/', authMiddleware,
 router.delete('/:id', authMiddleware,
     authorityMiddlewareDecorator(['admin']), categoryController.remove)
 
-module.exports = router
+export const categoryRouter = router

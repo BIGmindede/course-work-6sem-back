@@ -1,20 +1,22 @@
-require("dotenv").config()
-const express = require("express")
-const cors = require("cors")
-const cookieParser = require("cookie-parser")
-const mongoose = require("mongoose")
-const fileUpload = require('express-fileupload')
+import { config } from "dotenv"
+import express, { json } from "express"
+import cors from "cors"
+import cookieParser from "cookie-parser"
+import { connect } from "mongoose"
+import fileUpload from 'express-fileupload'
 
-const errorMiddleware = require('./middleware/errorMiddleware')
-const authorizationRouter = require('./routes/authRouter')
-const categoryRouter = require('./routes/categoryRouter')
-const reviewRouter = require('./routes/reviewRouter')
-const userRouter = require('./routes/userRouter')
-const requestRouter = require('./routes/requestRouter')
+import { errorMiddleware } from './middleware/errorMiddleware.js'
+import { authorizationRouter } from './routes/authRouter.js'
+import { categoryRouter } from './routes/categoryRouter.js'
+import { reviewRouter } from './routes/reviewRouter.js'
+import { userRouter } from './routes/userRouter.js'
+import { requestRouter } from './routes/requestRouter.js'
+
+config()
 
 const app = express()
 
-app.use(express.json())
+app.use(json())
 app.use(express.static('static'))
 app.use(fileUpload({}))
 app.use(cookieParser())
@@ -31,7 +33,7 @@ app.use(errorMiddleware)
 
 const start = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URL, {
+        await connect(process.env.MONGO_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })

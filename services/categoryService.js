@@ -1,9 +1,9 @@
-const CategoryDTO = require("../dtos/categoryDTO");
-const UserDTO = require("../dtos/userDTO");
-const ApiError = require("../exceptions/apiError");
-const categoryModel = require("../models/categoryModel");
-const userModel = require("../models/userModel");
-const fileService = require("./fileService");
+import { CategoryDTO } from "../dtos/categoryDTO.js"
+import { UserDTO } from "../dtos/userDTO.js"
+import { ApiError } from "../exceptions/apiError.js"
+import { categoryModel } from "../models/categoryModel.js"
+import { userModel } from "../models/userModel.js"
+import { fileService } from "./fileService.js"
 
 class CategoryService {
     async create(title, picture, request, author) {
@@ -13,7 +13,7 @@ class CategoryService {
         }
         const pictureName = fileService.saveFile(picture)
         const category = await categoryModel.create({ title, pictureName, request, author })
-        const relatedAuthor = await userModel.findOne(model.author)
+        const relatedAuthor = await userModel.findOne(category.author)
         const categoryData = new CategoryDTO(category, new UserDTO(relatedAuthor))
         return categoryData
     }
@@ -60,4 +60,4 @@ class CategoryService {
     }
 }
 
-module.exports = new CategoryService()
+export const categoryService = new CategoryService()

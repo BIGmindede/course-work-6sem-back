@@ -1,4 +1,4 @@
-module.exports = class ReviewDTO {
+export class ReviewDTO {
     id
     category
     author

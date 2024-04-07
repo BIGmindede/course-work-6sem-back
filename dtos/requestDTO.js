@@ -1,4 +1,4 @@
-module.exports = class RequestDTO {
+export class RequestDTO {
     id
     author
     title

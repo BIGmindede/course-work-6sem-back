@@ -1,4 +1,4 @@
-module.exports = class CategoryDTO {
+export class CategoryDTO {
     id
     title
     pictureName

@@ -1,8 +1,9 @@
-const ApiError = require("../exceptions/apiError")
-const jwtService = require("../services/jwtService")
-const userService = require("../services/userService")
+import { ApiError } from "../exceptions/apiError.js"
+import { jwtService } from "../services/jwtService.js"
+import { userService } from "../services/userService.js"
 
-module.exports = (requiredRole) => async function(req, res, next) {
+export const authorityMiddlewareDecorator =
+(requiredRole) => async function(req, res, next) {
     try {
         const { refreshToken } = req.cookies
         const { user } = await jwtService.findToken(refreshToken)

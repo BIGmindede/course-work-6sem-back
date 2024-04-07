@@ -1,11 +1,11 @@
-const ReviewDTO = require("../dtos/reviewDTO")
-const UserDTO = require("../dtos/userDTO")
-const categoryModel = require("../models/categoryModel")
-const reviewCommentModel = require("../models/reviewCommentModel")
-const reviewModel = require("../models/reviewModel")
-const reviewRateModel = require("../models/reviewRateModel")
-const userModel = require("../models/userModel")
-const fileService = require("./fileService")
+import { ReviewDTO } from "../dtos/reviewDTO.js"
+import { UserDTO } from "../dtos/userDTO.js"
+import { categoryModel } from "../models/categoryModel.js"
+import { reviewCommentModel } from "../models/reviewCommentModel.js"
+import { reviewModel } from "../models/reviewModel.js"
+import { reviewRateModel } from "../models/reviewRateModel.js"
+import { userModel } from "../models/userModel.js"
+import { fileService } from "./fileService.js"
 
 class ReviewService {
     async create(title, content, author, categoryName, picture) {
@@ -26,6 +26,16 @@ class ReviewService {
             const author = await userModel.findOne(model.author)
             return new ReviewDTO(model, new UserDTO(author))
         }))
+        return reviews
+    }
+
+    async getUserReviews(userId) {
+        const reviews = Promise.all((await reviewModel.find({ author: userId }))
+            .map(async (model) => {
+                const author = await userModel.findOne(model.author)
+                return new ReviewDTO(model, new UserDTO(author))
+            })
+        )
         return reviews
     }
 
@@ -51,4 +61,4 @@ class ReviewService {
     }
 }
 
-module.exports = new ReviewService()
+export const reviewService = new ReviewService()

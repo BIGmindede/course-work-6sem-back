@@ -1,4 +1,4 @@
-const userService = require("../services/userService")
+import { userService } from "../services/userService.js"
 
 class UserController {
     async getAll(req, res, next) {
@@ -21,7 +21,6 @@ class UserController {
     async banUser(req, res, next) {
         try {
             const { id } = req.params
-            console.log(id)
             const bannedUser = await userService.banUser(id)
             return res.json(bannedUser)
         } catch (e) {
@@ -30,4 +29,4 @@ class UserController {
     }
 }
 
-module.exports = new UserController()
+export const userController = new UserController()

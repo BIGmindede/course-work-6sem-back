@@ -1,9 +1,6 @@
-const jwt = require("jsonwebtoken")
-const uuid = require("uuid")
-const TokenModel = require('../models/tokenModel')
-const ApiError = require("../exceptions/apiError")
-const userService = require("./authService")
-const UserModel = require("../models/userModel")
+import jwt from "jsonwebtoken"
+import { tokenModel } from '../models/tokenModel.js'
+import { ApiError } from "../exceptions/apiError.js"
 
 class JWTService {
     generateTokens(payload) {
@@ -34,7 +31,7 @@ class JWTService {
     }
 
     async isSessionActive(refreshToken) {
-        const refreshTokenData = await TokenModel.findOne({ refreshToken })
+        const refreshTokenData = await tokenModel.findOne({ refreshToken })
         if (!refreshTokenData.isActivated) {
             return false
         }
@@ -42,7 +39,7 @@ class JWTService {
     }
 
     async cleanExpiredSessions(userId) {
-        const sessions = await TokenModel.find({ user: userId })
+        const sessions = await tokenModel.find({ user: userId })
         await Promise.all(sessions.map( async (session) => {
             const isTokenValid = this.validateRefreshToken(session.refreshToken)
             if (isTokenValid === null) {
@@ -52,22 +49,22 @@ class JWTService {
     }
 
     async saveToken(userId, refreshToken, authenticationLink) {
-        const tokenData = await TokenModel.findOne({ user: userId, authenticationLink })
+        const tokenData = await tokenModel.findOne({ user: userId, authenticationLink })
         if (tokenData) {
             tokenData.refreshToken = refreshToken
             return tokenData.save()
         }
-        const token = await TokenModel.create({ user: userId, refreshToken, authenticationLink })
+        const token = await tokenModel.create({ user: userId, refreshToken, authenticationLink })
         return token
     }
 
     async findToken(refreshToken) {
-        const tokenData = await TokenModel.findOne({ refreshToken })
+        const tokenData = await tokenModel.findOne({ refreshToken })
         return tokenData
     }
 
     async authenticateSession(authenticationLink) {
-        const session = await TokenModel.findOne({ authenticationLink })
+        const session = await tokenModel.findOne({ authenticationLink })
         if (!session) {
             throw ApiError.badRequestError("Некорректная сессия")
         }
@@ -76,9 +73,9 @@ class JWTService {
     }
 
     async removeSession(refreshToken) {
-        const tokenData = await TokenModel.deleteOne({ refreshToken })
+        const tokenData = await tokenModel.deleteOne({ refreshToken })
         return tokenData
     }
 }
 
-module.exports = new JWTService()
+export const jwtService = new JWTService()

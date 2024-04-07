@@ -1,7 +1,7 @@
-const { validationResult } = require("express-validator")
-const ApiError = require('../exceptions/apiError')
-const authService = require('../services/authService')
-const jwtService = require("../services/jwtService")
+import { validationResult } from "express-validator"
+import { ApiError } from '../exceptions/apiError.js'
+import { authService } from '../services/authService.js'
+import { jwtService } from '../services/jwtService.js'
 
 class AuthController {
     async registration(req, res, next) {
@@ -72,6 +72,17 @@ class AuthController {
             next(e)
         }
     }
+
+    async updateUserData(req, res, next) {
+        try {
+            const { id } = req.params
+            const { email, nickname, password } = req.body
+            const updatedUserData = await authService.updateUserData(id, email, nickname, password)
+            return res.json(updatedUserData)
+        } catch (e) {
+            next(e)            
+        }
+    }
 }
 
-module.exports = new AuthController()
+export const authController = new AuthController()
