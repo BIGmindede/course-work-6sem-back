@@ -1,8 +1,10 @@
-import { createTransport } from "nodemailer"
+import nodemailer from 'nodemailer'
+import { config } from "dotenv"
+config()
 
 class MailService {
     constructor() {
-        this.transporter = createTransport({
+        this.transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
             secure: false,
@@ -14,6 +16,7 @@ class MailService {
                 rejectUnauthorized: false 
             }
         })
+        this.sendActivationMail = this.sendActivationMail.bind(this)
     }
 
     async sendActivationMail(to, link) {
@@ -33,4 +36,4 @@ class MailService {
     }
 }
 
-export const mailService = new MailService()
+export const mailService = new MailService();

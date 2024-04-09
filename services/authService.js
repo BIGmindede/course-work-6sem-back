@@ -37,7 +37,7 @@ class AuthService {
         }
 
         if (!user.isActivated) {
-            await mailService.sendActivationMail(email, `${process.env.API_URL}/api/auth/activate_account/${user.activationLink}`)
+            await mailService(sendActivationMail(email, `${process.env.API_URL}/api/auth/activate_account/${user.activationLink}`))
             throw ApiError.inactiveAccountError()
         }
 
