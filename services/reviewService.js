@@ -6,6 +6,7 @@ import { reviewModel } from "../models/reviewModel.js"
 import { reviewRateModel } from "../models/reviewRateModel.js"
 import { userModel } from "../models/userModel.js"
 import { fileService } from "./fileService.js"
+import { reviewRateService } from "./reviewRateService.js"
 
 class ReviewService {
     async create(title, content, author, categoryName, picture) {
@@ -40,14 +41,19 @@ class ReviewService {
     }
 
     async getOne(id) {
-        const review = await reviewModel.findOne({ id })
+        const review = await reviewModel.findOne({ _id: id })
         const author = await userModel.findOne(review.author)
         const reviewData = new ReviewDTO(review, new UserDTO(author))
         return reviewData
     }
 
-    async update(id, rate) {
-        
+    async updateRate(id, rate, amountChange) {
+        const review = await reviewModel.findOne({ _id: id })
+        const newUsersRatedAmount = review.usersRatedAmount + amountChange
+        const newSumRates = review.reliability * review.usersRatedAmount + rate
+        review.reliability = newSumRates / newUsersRatedAmount
+        review.usersRatedAmount = newUsersRatedAmount
+        await review.save()
     }
 
     async remove(id) {

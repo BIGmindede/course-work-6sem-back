@@ -5,7 +5,7 @@ import { Router } from "express"
 
 const router = new Router()
 
-router.get('/', userController.getAll)
+router.get('/', authMiddleware, userController.getAll)
 
 router.get('/:id', userController.getOne)
 

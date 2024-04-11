@@ -5,6 +5,7 @@ export class ReviewDTO {
     title
     content
     reliability
+    usersRatedAmount
     date
     pictureName
 
@@ -14,6 +15,7 @@ export class ReviewDTO {
         this.title = model.title
         this.content = model.content
         this.reliability = model.reliability
+        this.usersRatedAmount = model.usersRatedAmount
         this.date = model.date
         this.pictureName = model.pictureName
         this.author = author
