@@ -13,10 +13,6 @@ router.get('/:id', reviewController.getOne)
 
 router.get('/by_user/:userId', reviewController.getUserReviews)
 
-// Только для пересчета оценок
-router.put('/', authMiddleware,
-    authorityMiddlewareDecorator(['user']), reviewController.update)
-
 router.delete('/:id', authMiddleware, reviewController.remove)
 
 export const reviewRouter = router

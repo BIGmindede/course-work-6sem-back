@@ -17,12 +17,12 @@ class ReviewService {
         const review = await reviewModel
             .create({ title, content, author, category, pictureName, date })
         const relatedAuthor = await userModel.findOne(review.author)
-        const reviewData = new ReviewDTO(review, new UserDTO(relatedAuthor))
+        const relatedCategory = await categoryModel.findOne(review.category)
+        const reviewData = new ReviewDTO(review, new UserDTO(relatedAuthor), relatedCategory.title)
         return reviewData
     }
 
     async getAll() {
-        
         const reviews = Promise.all((await reviewModel.find()).map(async (model) => {
             const author = await userModel.findOne(model.author)
             return new ReviewDTO(model, new UserDTO(author))
@@ -34,7 +34,8 @@ class ReviewService {
         const reviews = Promise.all((await reviewModel.find({ author: userId }))
             .map(async (model) => {
                 const author = await userModel.findOne(model.author)
-                return new ReviewDTO(model, new UserDTO(author))
+                const relatedCategory = await categoryModel.findOne(model.category)
+                return new ReviewDTO(model, new UserDTO(author), relatedCategory.title)
             })
         )
         return reviews
@@ -42,8 +43,9 @@ class ReviewService {
 
     async getOne(id) {
         const review = await reviewModel.findOne({ _id: id })
-        const author = await userModel.findOne(review.author)
-        const reviewData = new ReviewDTO(review, new UserDTO(author))
+        const author = await userModel.findOne({ _id: review.author })
+        const relatedCategory = await categoryModel.findOne(review.category)
+        const reviewData = new ReviewDTO(review, new UserDTO(author), relatedCategory.title)
         return reviewData
     }
 
@@ -61,7 +63,7 @@ class ReviewService {
         await reviewModel.deleteOne({ _id: id })
         await reviewRateModel.deleteMany({ review: id })
         await reviewCommentModel.deleteMany({ review: id })
-        const deletedReviewData = new ReviewDTO(deletedReview, null)
+        const deletedReviewData = new ReviewDTO(deletedReview, null, null)
         fileService.removeFile(deletedReviewData.pictureName)
         return deletedReviewData
     }

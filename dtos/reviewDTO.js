@@ -1,6 +1,7 @@
 export class ReviewDTO {
     id
     category
+    categoryId
     author
     title
     content
@@ -9,9 +10,10 @@ export class ReviewDTO {
     date
     pictureName
 
-    constructor(model, author) {
+    constructor(model, author, categoryName) {
         this.id = model._id
-        this.category = model.category
+        this.category = categoryName
+        this.categoryId = model.category
         this.title = model.title
         this.content = model.content
         this.reliability = model.reliability

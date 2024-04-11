@@ -31,18 +31,20 @@ class ReviewController {
     }
     async getOne(req, res, next) {
         try {
-            
+            const { id } = req.params
+            const review = await reviewService.getOne(id)
+            return res.json(review)
         } catch (e) {
             next(e)            
         }
     }
-    async update(req, res, next) {
-        try {
+    // async update(req, res, next) {
+    //     try {
             
-        } catch (e) {
-            next(e)            
-        }
-    }
+    //     } catch (e) {
+    //         next(e)            
+    //     }
+    // }
     async remove(req, res, next) {
         try {
             const { id } = req.params
