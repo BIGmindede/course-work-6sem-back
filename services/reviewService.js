@@ -1,3 +1,4 @@
+import { CategoryDTO } from "../dtos/categoryDTO.js"
 import { ReviewDTO } from "../dtos/reviewDTO.js"
 import { UserDTO } from "../dtos/userDTO.js"
 import { categoryModel } from "../models/categoryModel.js"
@@ -12,7 +13,7 @@ class ReviewService {
     async create(title, content, author, categoryName, picture) {
         const pictureName = fileService.saveFile(picture)
         const date = new Date()
-        const categoryData = await categoryModel.findOne({ title: categoryName })
+        const categoryData = new CategoryDTO(await categoryModel.findOne({ title: categoryName }))
         const category = categoryData.id
         const review = await reviewModel
             .create({ title, content, author, category, pictureName, date })
