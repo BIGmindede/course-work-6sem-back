@@ -13,7 +13,7 @@ class AuthController {
             const { email, password } = req.body
             const userData = await authService.register(email, password)
             if (process.env.MODE === "production") {
-                res.setHeader('Set-Cookie', `refreshToken=${userData.refreshToken}; SameSite=None; Secure; Partitioned`);
+                res.setHeader('Set-Cookie', `refreshToken=${userData.refreshToken}; HttpOnly; SameSite=None; Secure; Partitioned`);
             } 
             else {
                 res.cookie('refreshToken', userData.refreshToken, {
@@ -34,7 +34,7 @@ class AuthController {
             const { email, password } = req.body
             const userData = await authService.login(email, password)
             if (process.env.MODE === "production") {
-                res.setHeader('Set-Cookie', `refreshToken=${userData.refreshToken}; SameSite=None; Secure; Partitioned`);
+                res.setHeader('Set-Cookie', `refreshToken=${userData.refreshToken}; HttpOnly; SameSite=None; Secure; Partitioned`);
             } 
             else {
                 res.cookie('refreshToken', userData.refreshToken, {
@@ -82,7 +82,7 @@ class AuthController {
             const { refreshToken } = req.cookies
             const userData = await authService.refresh(refreshToken)
             if (process.env.MODE === "production") {
-                res.setHeader('Set-Cookie', `refreshToken=${userData.refreshToken}; SameSite=None; Secure; Partitioned`);
+                res.setHeader('Set-Cookie', `refreshToken=${userData.refreshToken}; HttpOnly; SameSite=None; Secure; Partitioned`);
             } 
             else {
                 res.cookie('refreshToken', userData.refreshToken, {
