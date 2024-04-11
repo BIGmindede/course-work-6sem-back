@@ -35,7 +35,10 @@ class AuthController {
             const activationLink = req.params.link
             await authService.activate(activationLink)
             await jwtService.authenticateSession(activationLink)
-            return res.redirect(process.env.CLIENT_URL)
+            return res.redirect(process.env.MODE === "production"
+                ? process.env.CLIENT_DEPLOYED_URL
+                : process.env.CLIENT_LOCAL_URL
+            )
         } catch(e) {
             next(e)
         }
@@ -45,7 +48,10 @@ class AuthController {
         try {
             const authenticationLink = req.params.link
             await jwtService.authenticateSession(authenticationLink)
-            return res.redirect(process.env.CLIENT_URL)
+            return res.redirect(process.env.MODE === "production"
+                ? process.env.CLIENT_DEPLOYED_URL
+                : process.env.CLIENT_LOCAL_URL
+            )
         } catch(e) {
             next(e)
         }

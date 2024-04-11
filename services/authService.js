@@ -16,7 +16,11 @@ class AuthService {
         const hashedPassword = await bcrypt.hash(password, 3)
         const activationLink = v4()
         user = await userModel.create({ email, password: hashedPassword, activationLink })
-        await mailService.sendActivationMail(email, `${process.env.API_URL}/api/auth/activate_account/${activationLink}`)
+        await mailService
+            .sendActivationMail(email,`${process.env.MODE === "production"
+                ? process.env.API_DEPLOYED_URL
+                : process.env.API_LOCAL_URL
+        }/api/auth/activate_account/${activationLink}`)
         const userDTO = new UserDTO(user)
         const tokens = jwtService.generateTokens({ ...userDTO })
         await jwtService.saveToken(userDTO.id, tokens.refreshToken, activationLink)
@@ -37,7 +41,11 @@ class AuthService {
         }
 
         if (!user.isActivated) {
-            await mailService(sendActivationMail(email, `${process.env.API_URL}/api/auth/activate_account/${user.activationLink}`))
+            await mailService
+                .sendActivationMail(email,`${process.env.MODE === "production"
+                    ? process.env.API_DEPLOYED_URL
+                    : process.env.API_LOCAL_URL
+                }/api/auth/activate_account/${user.activationLink}`)
             throw ApiError.inactiveAccountError()
         }
 
@@ -50,7 +58,11 @@ class AuthService {
         const authenticationLink = v4()
         await jwtService.saveToken(userDTO.id, tokens.refreshToken, authenticationLink)
 
-        await mailService.sendActivationMail(email, `${process.env.API_URL}/api/auth/authenticate_session/${authenticationLink}`)
+        await mailService
+            .sendActivationMail(email,`${process.env.MODE === "production"
+                ? process.env.API_DEPLOYED_URL
+                : process.env.API_LOCAL_URL
+            }/api/auth/authenticate_session/${authenticationLink}`)
 
         return { ...tokens, user: userDTO }
     }
