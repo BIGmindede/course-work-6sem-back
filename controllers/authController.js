@@ -12,7 +12,17 @@ class AuthController {
             }
             const { email, password } = req.body
             const userData = await authService.register(email, password)
-            res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 3600 * 1000, httpOnly: true })
+            if (process.env.MODE === "production") {
+                res.setHeader('Set-Cookie', `refreshToken=${userData.refreshToken}; SameSite=None; Secure; Partitioned`);
+            } 
+            else {
+                res.cookie('refreshToken', userData.refreshToken, {
+                    maxAge: 30 * 24 * 3600 * 1000,
+                    httpOnly: true,
+                    sameSite: "Strict",
+                    secure: false
+                })
+            }
             return res.json({ ...userData.user, accessToken: userData.accessToken })
         } catch(e) {
             next(e)
