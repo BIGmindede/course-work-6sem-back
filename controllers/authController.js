@@ -26,8 +26,8 @@ class AuthController {
             res.cookie('refreshToken', userData.refreshToken, {
                 maxAge: 30 * 24 * 3600 * 1000,
                 httpOnly: true,
-                sameSite: "Strict",
-                secure: true
+                sameSite: process.env.MODE === "production" ? "None" : "Strict",
+                secure: process.env.MODE === "production" ? true : false
             })
             return res.json({ ...userData.user, accessToken: userData.accessToken })
         } catch(e) {
@@ -69,8 +69,8 @@ class AuthController {
             res.cookie('refreshToken', userData.refreshToken, {
                 maxAge: 30 * 24 * 3600 * 1000,
                 httpOnly: true,
-                sameSite: "Strict",
-                secure: true
+                sameSite: process.env.MODE === "production" ? "None" : "Strict",
+                secure: process.env.MODE === "production" ? true : false
             })
             return res.json({ ...userData.user, accessToken: userData.accessToken })
         } catch(e) {
