@@ -23,13 +23,17 @@ class AuthController {
         try {
             const { email, password } = req.body
             const userData = await authService.login(email, password)
-            res.cookie('refreshToken', userData.refreshToken, {
-                maxAge: 30 * 24 * 3600 * 1000,
-                httpOnly: true,
-                sameSite: process.env.MODE === "production" ? "None" : "Strict",
-                secure: process.env.MODE === "production" ? true : false,
-                partitioned: process.env.MODE === "production" ? true : false
-            })
+            if (process.env.MODE === "production") {
+                res.setHeader('Set-Cookie', `refreshToken=${userData.refreshToken}; SameSite=None; Secure; Partitioned`);
+            } 
+            else {
+                res.cookie('refreshToken', userData.refreshToken, {
+                    maxAge: 30 * 24 * 3600 * 1000,
+                    httpOnly: true,
+                    sameSite: "Strict",
+                    secure: false
+                })
+            }
             return res.json({ ...userData.user, accessToken: userData.accessToken })
         } catch(e) {
             next(e)
@@ -67,13 +71,17 @@ class AuthController {
         try {
             const { refreshToken } = req.cookies
             const userData = await authService.refresh(refreshToken)
-            res.cookie('refreshToken', userData.refreshToken, {
-                maxAge: 30 * 24 * 3600 * 1000,
-                httpOnly: true,
-                sameSite: process.env.MODE === "production" ? "None" : "Strict",
-                secure: process.env.MODE === "production" ? true : false,
-                partitioned: process.env.MODE === "production" ? true : false
-            })
+            if (process.env.MODE === "production") {
+                res.setHeader('Set-Cookie', `refreshToken=${userData.refreshToken}; SameSite=None; Secure; Partitioned`);
+            } 
+            else {
+                res.cookie('refreshToken', userData.refreshToken, {
+                    maxAge: 30 * 24 * 3600 * 1000,
+                    httpOnly: true,
+                    sameSite: "Strict",
+                    secure: false
+                })
+            }
             return res.json({ ...userData.user, accessToken: userData.accessToken })
         } catch(e) {
             next(e)
