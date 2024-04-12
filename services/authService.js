@@ -109,7 +109,8 @@ class AuthService {
             user.nickname = nickname
         }
         if (user.password !== password && password.length > 0) {
-            user.password = password
+            const hashedPassword = await bcrypt.hash(password, 3)
+            user.password = hashedPassword
         }
         const updatedUser = await user.save()
         const updatedUserData = new UserDTO(updatedUser)
