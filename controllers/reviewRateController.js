@@ -12,7 +12,7 @@ class ReviewRateController {
     }
     async getOneByUserAndReview(req, res, next) {
         try {
-            const { review, author } = req.body
+            const { review, author } = req.params
             const rate = await reviewRateService.getOneByUserAndReview(review, author)
             return res.json(rate)
         } catch (e) {
@@ -21,7 +21,8 @@ class ReviewRateController {
     }
     async update(req, res, next) {
         try {
-            const { id, value } = req.body
+            const { id } = req.params
+            const { value } = req.body
             const updatedReview = await reviewRateService.update(id, value)
             return res.json(updatedReview)
         } catch (e) {

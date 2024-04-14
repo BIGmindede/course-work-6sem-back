@@ -54,9 +54,10 @@ class ReviewService {
         const review = await reviewModel.findOne({ _id: id })
         const newUsersRatedAmount = review.usersRatedAmount + amountChange
         const newSumRates = review.reliability * review.usersRatedAmount + rate
-        review.reliability = newSumRates / newUsersRatedAmount
+        review.reliability = newUsersRatedAmount === 0 ? 0 : newSumRates / newUsersRatedAmount
         review.usersRatedAmount = newUsersRatedAmount
-        await review.save()
+        const reviewData = await review.save()
+        return reviewData
     }
 
     async remove(id) {

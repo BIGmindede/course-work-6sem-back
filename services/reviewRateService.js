@@ -5,7 +5,7 @@ import { reviewService } from "./reviewService.js"
 
 class ReviewRateService {
     async create(review, value, author) {
-        const reviewRateExists = !!(await reviewRateModel.findOne({ review, value, author }))
+        const reviewRateExists = !!(await reviewRateModel.findOne({ review, author }))
         if (reviewRateExists) {
             throw ApiError.badRequestError('Вы уже оценили данный отзыв!')
         }
@@ -16,9 +16,12 @@ class ReviewRateService {
     }
 
     async getOneByUserAndReview(review, author) {
-        const rate = reviewRateModel.findOne({ review, author })
-        const rateData = new ReviewRateDTO(rate)
-        return rateData
+        const rate = await reviewRateModel.findOne({ review, author })
+        if (rate) {
+            const rateData = new ReviewRateDTO(rate)
+            return rateData
+        }
+        return (null)
     }
 
     async update(id, value) {
@@ -37,16 +40,13 @@ class ReviewRateService {
     }
 
     async remove(id) {
-        const reviewRateExists = !!(await reviewRateModel.exists({ review, author }))
-        if (!reviewRateExists) {
+        const reviewRate = await reviewRateModel.findOne({ _id: id })
+        if (!reviewRate) {
             throw ApiError.badRequestError('У вас нет оценок на данный отзыв!')
         }
-
-        const reviewRate = await reviewRateModel.findOne({ _id: id })
-        await reviewRateModel.deleteOne({ _id: id })
-
         const value = reviewRate.value
         const review = reviewRate.review
+        await reviewRateModel.deleteOne({ _id: id })
         const updatedReview = await reviewService.updateRate(review, value, -1)
         return updatedReview
     }

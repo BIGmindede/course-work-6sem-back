@@ -7,17 +7,17 @@ import { body } from "express-validator"
 const router = new Router()
 
 router.post('/', 
-    body('value').isInt({ min: 1, max: 10 }),
+    body('value').isInt({ min: 1, max: 5 }),
     authMiddleware,
     authorityMiddlewareDecorator(['user', 'admin']),
     reviewRateController.create)
 
-router.get('/:id/:user_id', authMiddleware, reviewRateController.getOneByUserAndReview)
+router.get('/:review/:author', authMiddleware, reviewRateController.getOneByUserAndReview)
 
 router.put('/:id',
-    body('value').isInt({ min: 1, max: 10 }),
+    body('value').isInt({ min: 1, max: 5 }),
     authMiddleware,
-    authorityMiddlewareDecorator(['user']),
+    authorityMiddlewareDecorator(['user','admin']),
     reviewRateController.update)
 
 router.delete('/:id', authMiddleware, reviewRateController.remove)
