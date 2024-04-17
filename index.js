@@ -14,6 +14,7 @@ import { reviewRouter } from './routes/reviewRouter.js'
 import { userRouter } from './routes/userRouter.js'
 import { requestRouter } from './routes/requestRouter.js'
 import { reviewRateRouter } from './routes/reviewRateRouter.js'
+import { complaintRouter } from "./routes/complaintRouter.js"
 
 const app = express()
 
@@ -31,6 +32,7 @@ app.use('/api/review', reviewRouter)
 app.use('/api/user', userRouter)
 app.use('/api/request', requestRouter)
 app.use('/api/review_rate', reviewRateRouter)
+app.use('/api/complaint', complaintRouter)
 app.use(errorMiddleware)
 
 const start = async () => {
