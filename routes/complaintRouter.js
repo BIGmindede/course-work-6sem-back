@@ -1,5 +1,4 @@
 import { complaintController } from "../controllers/complaintController.js"
-import { requestController } from "../controllers/requestController.js"
 import { authMiddleware } from "../middleware/authMiddleware.js"
 import { authorityMiddlewareDecorator } from "../middleware/authorityMiddlewareDecorator.js"
 import { Router } from "express"

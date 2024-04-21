@@ -10,7 +10,7 @@ class ComplaintService {
     async create(author, target, review, content) {
         const complaint = await complaintModel.findOne({ author, target, review })
         if (complaint) {
-            throw ApiError.badRequestError("Вы уже оставляли жалобу на данный отзыв")
+            throw ApiError.badRequestError("Вы уже оставляли жалобу на данный отзыв!")
         }
         const date = new Date()
         await complaintModel.create({ author, target, review, content, date })
