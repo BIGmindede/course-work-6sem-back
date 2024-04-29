@@ -14,7 +14,8 @@ class ReviewController {
     }
     async getAll(req, res, next) {
         try {
-            const reviews = await reviewService.getAll()
+            const { minMark, minDate, maxDate, category, title, orderBy } = req.query
+            const reviews = await reviewService.getAll(minMark, minDate, maxDate, category, title, orderBy)
             return res.json(reviews)
         } catch (e) {
             next(e)
