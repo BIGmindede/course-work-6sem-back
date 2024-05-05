@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose'
 
 const UserSchema = new Schema({
     email: { type: String, unique: true, required: true },
-    nickname: { type: String, unique: true, default: null },
+    nickname: { type: String, default: null },
     password: { type: String, required: true },
     isActivated: { type: Boolean, default: false },
     activationLink: { type: String },
