@@ -34,7 +34,7 @@ class ReviewService {
                 let query = true
                 if (minMark) query = query && review.reliability >= minMark
                 if (minDate) query = query && review.date >= minDate
-                if (maxDate) query = query && review.query <= maxDate
+                if (maxDate) query = query && review.date <= maxDate
                 if (category) query = query && review.category.toLowerCase().includes(category.toLowerCase())
                 if (title) query = query && review.title.toLowerCase().includes(title.toLowerCase())
                 return query
