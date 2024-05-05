@@ -15,7 +15,8 @@ class AuthService {
 
         const hashedPassword = await bcrypt.hash(password, 3)
         const activationLink = v4()
-        user = await userModel.create({ email, password: hashedPassword, activationLink })
+        const nickname = v4()
+        user = await userModel.create({ email, password: hashedPassword, activationLink, nickname })
         await mailService
             .sendActivationMail(email,`${process.env.MODE === "production"
                 ? process.env.API_DEPLOYED_URL
