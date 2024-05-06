@@ -23,18 +23,26 @@ class ReviewService {
         return reviewData
     }
 
-    async getAll(minMark, minDate, maxDate, category, title, orderBy) {
+    async getAll(minMark, minDate, maxDate, category, title, orderBy, page, portion) {
         let reviews = Promise.all((await reviewModel.find()).map(async (model) => {
             const category = await categoryModel.findOne(model.category)
             const author = await userModel.findOne(model.author)
             return new ReviewDTO(model, new UserDTO(author), category.title)
         }))
-        if (minMark || minDate || maxDate || category || title || orderBy) {
-            reviews = (await reviews).filter(review => {
+        if (minMark || minDate || maxDate || category || title || orderBy || page || portion) {
+            reviews = (await reviews).filter((review, index) => {
                 let query = true
+                if (page) {
+                    if (portion) {
+                        query = query && index < page * portion
+                    }
+                    else {
+                        query = query && index < page * 20
+                    }
+                }
                 if (minMark) query = query && review.reliability >= minMark
-                if (minDate) query = query && review.date >= minDate
-                if (maxDate) query = query && review.date <= maxDate
+                if (minDate) query = query && review.date.getTime() >= new Date(minDate).getTime()
+                if (maxDate) query = query && review.date.getTime() <= new Date(maxDate).getTime() + 86400000
                 if (category) query = query && review.category.toLowerCase().includes(category.toLowerCase())
                 if (title) query = query && review.title.toLowerCase().includes(title.toLowerCase())
                 return query
@@ -49,18 +57,16 @@ class ReviewService {
                         b.title.localeCompare(a.title, undefined, { numeric: true }))
                     break
                 case "mark_asc":
-                    reviews = (await reviews).sort((a,b) =>
-                        a.reliability.localeCompare(b.reliability, undefined, { numeric: true }))
+                    reviews = (await reviews).sort((a,b) => a.reliability >= b.reliability)
                     break
                 case "mark_desc":
-                    reviews = (await reviews).sort((a,b) =>
-                        b.reliability.localeCompare(a.reliability, undefined, { numeric: true }))
+                    reviews = (await reviews).sort((a,b) => b.reliability >= a.reliability)
                     break
                 case "date_asc":
-                    reviews = (await reviews).sort((a,b) => a.date > b.date)
+                    reviews = (await reviews).sort((a,b) => a.date.getTime() >= b.date.getTime())
                     break
                 case "date_desc":
-                    reviews = (await reviews).sort((a,b) => b.date > a.date)
+                    reviews = (await reviews).sort((a,b) => b.date.getTime() >= a.date.getTime())
                     break
                 default:
                     break

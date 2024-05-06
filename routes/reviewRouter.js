@@ -9,8 +9,6 @@ router.post('/', authMiddleware, authorityMiddlewareDecorator(['user', 'admin'])
 
 router.get('/', reviewController.getAll)
 
-router.get('/filtered', reviewController.getAll)
-
 router.get('/:id', reviewController.getOne)
 
 router.get('/by_user/:userId', reviewController.getUserReviews)
