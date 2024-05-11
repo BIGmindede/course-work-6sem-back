@@ -8,7 +8,7 @@ const ReviewSchema = new Schema({
     reliability: { type: Number, float: true, default: (0).toFixed(1) },
     usersRatedAmount: { type: Number, default: 0 },
     date: { type: Schema.Types.Date, required: true },
-    pictureName: { type: String, required: true }
+    pictureName: { type: String }
 })
 
 export const reviewModel = model("Review", ReviewSchema)
