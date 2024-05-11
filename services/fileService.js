@@ -17,7 +17,7 @@ class FileService {
 
     removeFile(fileName) {
         if (fileName) {
-            filePath = resolve('static', fileName)
+            const filePath = resolve('static', fileName)
             if (existsSync(filePath)) {
                 try {
                     
