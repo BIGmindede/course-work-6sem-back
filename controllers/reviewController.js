@@ -4,7 +4,7 @@ class ReviewController {
     async create(req, res, next) {
         try {
             const { title, content, author, categoryName } = req.body
-            const picture = req.files.picture
+            const picture = req?.files?.picture
             const reviewData = await reviewService
                 .create(title, content, author, categoryName, picture)
             return res.json(reviewData)

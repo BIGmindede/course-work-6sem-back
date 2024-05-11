@@ -1,6 +1,6 @@
 import { v4 } from "uuid"
 import { resolve } from 'path'
-import { unlink } from "fs"
+import { existsSync, unlink } from "fs"
 import { ApiError } from "../exceptions/apiError.js"
 
 class FileService {
@@ -16,16 +16,22 @@ class FileService {
     }
 
     removeFile(fileName) {
-        try {
-            const filePath = resolve('static', fileName)
-            unlink(filePath, (err) => {
-                if (err) {
-                    throw ApiError.fileRemoveError()
+        if (fileName) {
+            filePath = resolve('static', fileName)
+            if (existsSync(filePath)) {
+                try {
+                    
+                    unlink(filePath, (err) => {
+                        if (err) {
+                            throw ApiError.fileRemoveError()
+                        }
+                        console.log("Файл успешно удален")
+                    })
+                } catch(e) {
+                    console.log(e)
                 }
-                console.log("Файл успешно удален")
-            })
-        } catch(e) {
-            console.log(e)
+            
+            }
         }
     }
 }

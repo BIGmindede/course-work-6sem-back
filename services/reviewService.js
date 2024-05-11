@@ -11,7 +11,7 @@ import { reviewRateService } from "./reviewRateService.js"
 
 class ReviewService {
     async create(title, content, author, categoryName, picture) {
-        const pictureName = fileService.saveFile(picture)
+        const pictureName = picture ? fileService.saveFile(picture) : null
         const date = new Date()
         const categoryData = new CategoryDTO(await categoryModel.findOne({ title: categoryName }))
         const category = categoryData.id
