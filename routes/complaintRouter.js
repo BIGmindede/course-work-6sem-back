@@ -9,7 +9,7 @@ router.post('/', authMiddleware, authorityMiddlewareDecorator(['user', 'admin'])
 
 router.get('/', authMiddleware, complaintController.getAll)
 
-router.get('/:userId', complaintController.getUserComplaints)
+router.get('/:userId', authMiddleware, complaintController.getUserComplaints)
 
 router.put('/:id', authMiddleware, authorityMiddlewareDecorator(['admin', 'moderator']), complaintController.update)
 

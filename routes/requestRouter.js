@@ -9,9 +9,7 @@ router.post('/', authMiddleware, authorityMiddlewareDecorator(['user', 'admin'])
 
 router.get('/', authMiddleware, requestController.getAll)
 
-router.get('/by_user/:userId', requestController.getUserRequests)
-
-// router.get('/:id', reviewController.getOne)
+router.get('/by_user/:userId', authMiddleware, requestController.getUserRequests)
 
 router.put('/:id', authMiddleware, authorityMiddlewareDecorator(['admin', 'moderator']), requestController.update)
 
