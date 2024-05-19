@@ -10,6 +10,6 @@ export class ReviewCommentDTO {
         this.review = model.review
         this.content = model.content
         this.date = model.date
-        this.author = author
+        this.author = author // UserDTO
     }
 }

@@ -12,6 +12,6 @@ export class RequestDTO {
         this.content = model.content
         this.date = model.date
         this.status = model.status
-        this.author = author
+        this.author = author // UserDTO
     }
 }

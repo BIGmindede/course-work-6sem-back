@@ -12,7 +12,10 @@ export class ReviewDTO {
 
     constructor(model, author, categoryName) {
         this.id = model._id
-        this.category = categoryName
+        // Так как в записи таблицы отзывов содержится только id категории,
+        // к которой привязан отзыв, то в эту дто-шку закидываем
+        // также и название самой категории
+        this.category = categoryName 
         this.categoryId = model.category
         this.title = model.title
         this.content = model.content
@@ -20,6 +23,6 @@ export class ReviewDTO {
         this.usersRatedAmount = model.usersRatedAmount
         this.date = model.date
         this.pictureName = model.pictureName
-        this.author = author
+        this.author = author // UserDTO
     }
 }

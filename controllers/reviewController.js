@@ -39,13 +39,6 @@ class ReviewController {
             next(e)            
         }
     }
-    // async update(req, res, next) {
-    //     try {
-            
-    //     } catch (e) {
-    //         next(e)            
-    //     }
-    // }
     async remove(req, res, next) {
         try {
             const { id } = req.params
