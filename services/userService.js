@@ -14,6 +14,20 @@ class UserService {
         return userData
     }
 
+    async setUserRole(id, role) {
+        const user = await userModel.findOne({ _id: id })
+        user.role = role
+        await user.save()
+        return user
+    }
+
+    async unbanUser(id) {
+        const user = await userModel.findOne({ _id: id })
+        user.isActivated = true
+        await user.save()
+        return user
+    }
+
     async banUser(id) {
         const user = await userModel.findOne({ _id: id })
         user.isActivated = false

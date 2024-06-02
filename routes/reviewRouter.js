@@ -5,7 +5,7 @@ import { Router } from "express"
 
 const router = new Router()
 
-router.post('/', authMiddleware, authorityMiddlewareDecorator(['user', 'admin']), reviewController.create)
+router.post('/', authMiddleware, reviewController.create)
 
 router.get('/', reviewController.getAll)
 

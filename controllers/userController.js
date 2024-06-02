@@ -18,6 +18,25 @@ class UserController {
             next(e)            
         }
     }
+    async setUserRole(req, res, next) {
+        try {
+            const { id } = req.params
+            const { role } = req.body 
+            const settingUser = await userService.setUserRole(id, role)
+            return res.json(settingUser)
+        } catch (e) {
+            next(e)            
+        }
+    }
+    async unbanUser(req, res, next) {
+        try {
+            const { id } = req.params
+            const unbannedUser = await userService.unbanUser(id)
+            return res.json(unbannedUser)
+        } catch (e) {
+            next(e)            
+        }
+    }
     async banUser(req, res, next) {
         try {
             const { id } = req.params
